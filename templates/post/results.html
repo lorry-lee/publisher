@@ -1,0 +1,7 @@
+<h1>{{ post.title }}</h1>
+<li><a href="/post/">Back to home</a></li>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<p>Thanks for your story, the submitted story {{ post.title }} will be displayed in the index site after checking through.</p>
+<p>Submit time: {{ post.pub_date }}</p>

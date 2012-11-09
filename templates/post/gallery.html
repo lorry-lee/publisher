@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us" xml:lang="en-us" > 
+<head> 
+<title>browse and upload image</title> 
+<link rel="stylesheet" type="text/css" href="/media/css/base.css" /> 
+<link rel="stylesheet" type="text/css" href="/media/css/forms.css" /> 
+<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/media/css/ie.css" /><![endif]--> 
+ 
+<script type="text/javascript">window.__admin_media_prefix__ = "/media/";</script> 
+ 
+<script type="text/javascript" src="/media/js/core.js"></script> 
+<script type="text/javascript" src="/media/js/admin/RelatedObjectLookups.js"></script> 
+<script type="text/javascript" src="/media/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/media/js/jquery.init.js"></script>
+<script type="text/javascript" src="/media/js/actions.min.js"></script> 
+ 
+<meta name="robots" content="NONE,NOARCHIVE" /> 
+</head>  
+
+<!-- Use to check the user have the correct inputs -->
+<script type="text/javascript" src="/media/js/jquery.init.js"></script>
+
+<!-- Use this script to close and set the image url when click any post image -->
+<script language="javascript" type="text/javascript">
+    function openfile( img_url ) {
+        window.top.opener.SetUrl( img_url ) ;
+        window.top.close() ;
+        window.top.opener.focus() ;
+    }
+</script>
+
+<!-- Display all the images -->
+{% if post_image_list %}
+    {% for post_image in post_image_list %}
+    <span class="pages">
+    <a href="#" onclick="openfile('{{post_image.image.url}}');return false;">
+        <img src="{{post_image.get_thumbnail_url}}"/>
+    </a>
+    </span>
+    {% endfor %}
+{% else %}
+    <p>No image are available.</p>
+{% endif %}
+
+<!--Pages-->
+<div class='wp-pagenavi'>
+<span class='pages'>页数 {{ page.number }} / {{ paginator.num_pages }} </span>
+<a href="/fckeditor/fckeditor/editor/gallery/browse/1/page/">第一页</a>
+{% if page.has_previous %}
+    <a href="/fckeditor/fckeditor/editor/gallery/browse/{{ page.previous_page_number }}/page/">上一页</a>
+    {% ifnotequal page.previous_page_number 1 %}
+       <span class='pages'> ... </span>
+    {% endifnotequal %}
+    <a href="/fckeditor/fckeditor/editor/gallery/browse/{{ page.previous_page_number }}/page/">{{ page.previous_page_number }}</a>
+{% endif %}
+<span class='pages'> {{ page.number }} </span>
+{% if page.has_next %}
+    <a href="/fckeditor/fckeditor/editor/gallery/browse/{{ page.next_page_number }}/page/">{{ page.next_page_number }}</a>
+    {% ifnotequal page.next_page_number paginator.num_pages %}
+        <span class='pages'> ... </span>
+    {% endifnotequal %}
+    <a href="/fckeditor/fckeditor/editor/gallery/browse/{{ page.next_page_number }}/page/">下一页</a>
+{% endif %}
+<a href="/fckeditor/fckeditor/editor/gallery/browse/{{ paginator.num_pages }}/page/">最后一页</a>
+</div>
+
+<!-- Upload form, the image path and user cookie is a must need -->
+<form enctype="multipart/form-data" action="/fckeditor/fckeditor/editor/gallery/upload/" method="post" id="postimage_form">
+{% csrf_token %}
+<div> 
+    <fieldset class="module aligned ">     
+        <div class="form-row image"> 
+                <div> 
+                        <label for="id_image" class="required">Image:</label>
+                        <input type="file" name="image" id="id_image" /> 
+                </div>
+        </div> 
+    </fieldset> 
+    <div class="submit-row" > 
+        <input type="submit" value="Save" class="default" name="_save" /> 
+    </div> 
+    <script type="text/javascript">document.getElementById("id_image").focus();</script>
+ 
+    <script type="text/javascript"> 
+        (function($) {
+            var field = null;
+        })(django.jQuery);
+    </script>
+</div>
+</form>

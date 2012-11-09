@@ -1,0 +1,74 @@
+<h1>{{ post.title }}</h1>
+<li><a href="/post/">Back to home</a></li>
+
+<!--main post-->
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <div class="entry">{{ post.content|safe }}</div>
+    <div class="clearfix"></div>
+    <p>Vote number: {{ post.vote_set.all|length }}</p>
+    <p>Neg Vote number: {{ post.negvote_set.all|length }}</p>
+    <p>Submit time: {{ post.pub_date }}</p>
+    <p>Comments: {{ post.reply_set.all|length }}</p>
+<form action="/post/{{ post.id }}/vote/" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Vote" />
+</form>
+<form action="/post/{{ post.id }}/neg_vote/" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Neg Vote" />
+</form>
+
+<!--replies-->
+{% for reply in reply_list %}
+    {% if reply.is_public %}
+        <div class="entry">{{ reply.content|safe }}</div>
+    {% endif %}
+{% endfor %}
+
+<!--edit box area-->
+<form action="/post/{{ post.id }}/reply/" method="post">
+{% csrf_token %}
+  <p>
+    <textarea name="content" id="content" cols="45" rows="5"></textarea>
+    <label for="content"></label>
+  </p>
+  <p>
+    <input type="submit" name="submit" id="submit" value="submit" />
+  </p>
+</form>
+
+<!-- pages -->
+<div class='wp-pagenavi'>
+<span class='pages'>页数 {{ page.number }} / {{ paginator.num_pages }} </span>
+<a href="/post/{{ post.id }}/detail/1/page/">第一页</a>
+{% if page.has_previous %}
+    <a href="/post/{{ post.id }}/detail/{{ page.previous_page_number }}/page/">上一页</a>
+    {% ifnotequal page.previous_page_number 1 %}
+       <span class='pages'> ... </span>
+    {% endifnotequal %}
+    <a href="/post/{{ post.id }}/detail/{{ page.previous_page_number }}/page/">{{ page.previous_page_number }}</a>
+{% endif %}
+<span class='pages'> {{ page.number }} </span>
+{% if page.has_next %}
+    <a href="/post/{{ post.id }}/detail/{{ page.next_page_number }}/page/">{{ page.next_page_number }}</a>
+    {% ifnotequal page.next_page_number paginator.num_pages %}
+        <span class='pages'> ... </span>
+    {% endifnotequal %}
+    <a href="/post/{{ post.id }}/detail/{{ page.next_page_number }}/page/">下一页</a>
+{% endif %}
+<a href="/post/{{ post.id }}/detail/{{ paginator.num_pages }}/page/">最后一页</a>
+</div>
+<!-- pages end -->
+
+<script type="text/javascript" src="/fckeditor/fckeditor/fckeditor.js"></script>
+<script type="text/javascript">
+    var nodeList = document.getElementsByTagName("textarea");
+  for (var i=0; i<nodeList.length; i++) {
+    var elm = nodeList.item(i);
+    var oFCKeditor = new FCKeditor( elm.id ) ; 
+    oFCKeditor.Height = 300;
+    oFCKeditor.Width = 600;
+    oFCKeditor.BasePath = "/fckeditor/fckeditor/" ; 
+    oFCKeditor.ReplaceTextarea() ; 
+  }
+</script>

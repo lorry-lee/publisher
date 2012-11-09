@@ -1,0 +1,230 @@
+网站主页
+http://66.228.36.17:8000/
+
+- 获取资讯分类
+    * url
+        http://66.228.36.17:8000/post/post_type_list/ 
+
+    * output
+        {
+            "post_types": [
+                    {"id": 1, "name": "name1"},
+                    {"id": 2, "name": "name2"},
+                    {"id": 3, "name": "name3"}
+                ]
+        }
+
+    * desc
+        id: 类型id
+        name: 后面是名称
+
+- 获取产品分类
+    * url
+        http://66.228.36.17:8000/post/product_type_list/ 
+
+    * output
+        {
+            "product_types": [
+                    {"id": 1, "name": "name1"},
+                    {"id": 2, "name": "name2"},
+                    {"id": 3, "name": "name3"}
+                ]
+        }
+
+    * desc
+        id: 类型id
+        name: 后面是名称
+
+- 获取图片轮询
+    * url
+        http://66.228.36.17:8000/post/rolling_post/1/post_type/
+        规则为 http://66.228.36.17:8000/post/rolling_post/post类型/post_type/
+
+    * output
+        {
+            "posts": [
+                {"post_id": 49, "preview": "预览内容", "reply_count": "1", "title": "标题", "picture": "xxx.jpg", "post_url":"http://127.0.0.1:8000/post/49/detail/"}
+            ]
+        }
+
+    *desc
+        posts: 轮询的post数组
+        post_id: post的id
+        preview: 预览内容
+        reply_count: 回复数
+        post_url: post的网页地址
+        title: post的标题
+        picture: 图片的url地址
+
+        返回0-3个posts
+
+- 获取图集列表
+    * url
+        http://66.228.36.17:8000/post/gallery_list/1/page/
+        规则为 http://66.228.36.17:8000/post/gallery_list/页数/page/
+        每页最多返回10个
+
+    * output
+        {
+            "galleries": [
+                {"sample_url": "xxx0.jpg", "photo_count": 1, "id": 2, "title": "gallery2"},
+                {"sample_url": "xxx1.jpg", "photo_count": 2, "id": 1, "title": "gallery1"}
+            ],
+            "num_pages": 1
+        }
+
+    * desc
+        galleries: 图集列表
+        sample_url: 预览图地址
+        photo_count: 图集内图片数
+        id: 图集id
+        title: 图集标题
+        num_pages: 页面总数
+
+- 获取图片列表
+    * url
+        http://66.228.36.17:8000/post/photo_list/1/gallery/
+        规则为 http://66.228.36.17:8000/post/photo_list/gallery的id/gallery/
+
+    * output
+        {
+            "photos": [
+                {"url": "xxx1.jpg", "id": 2, "name": "photo2", "link": "http://66.228.36.17:8000"}, 
+                {"url": "xxx2.jpg", "id": 1, "name": "photo1", "link": "http://66.228.36.17:8000"}
+            ]
+        }
+
+    * desc
+        photos: 图片列表
+        url: 图片地址
+        id: 图片id
+        name: 图片标题
+        link: 图片链接(目前只返回首页url地址)
+
+- 通过资讯分类获取post列表:
+    * url
+        http://66.228.36.17:8000/post/post_list/0/post_type/1/page/ 
+        规则为 http://66.228.36.17:8000/post/post_list/post类型/post_type/页数/page/ 
+
+    * output
+        {
+            "posts": [
+                {"picture": "url.jpg", "title": "xxx概述", "reply_count":"3", "preview":"xxx描述", "post_url":"http://127.0.0.1:8000/post/49/detail/"},
+                {"picture": "url.jpg", "title": "xxx概述", "reply_count":"3", "preview":"xxx描述", "post_url":"http://127.0.0.1:8000/post/49/detail/"}
+            ],
+            "num_pages": 1
+        }
+
+    * desc
+        picture: 预览图片的url地址
+        title: 标题
+        reply_count: 回复数
+        post_url: post的网页地址
+        preview: 简短的信息描述预览
+        num_pages: 页面总数
+
+        每页会返回10个post,末页只显示剩余post
+
+- 通过产品分类获取post列表:
+    * url
+        http://66.228.36.17:8000/post/product_list/0/product_type/1/page/ 
+        规则为 http://66.228.36.17:8000/post/product_list/产品类型id/product_type/页数/page/ 
+
+    * output
+        {
+            "posts": [
+                {"picture": "url.jpg", "title": "xxx概述", "reply_count":"4", "preview":"xxx描述", "post_url":"http://127.0.0.1:8000/post/49/detail/"},
+                {"picture": "url.jpg", "title": "xxx概述", "reply_count":"3", "preview":"xxx描述", "post_url":"http://127.0.0.1:8000/post/49/detail/"}
+            ],
+            "num_pages": 1
+        }
+
+    * desc
+        picture: 预览图片的url地址
+        title: 标题
+        reply_count: 回复数
+        post_url: post的网页地址
+        preview: 简短的信息描述预览
+        num_pages: 页面总数
+
+        每页会返回10个post,末页只显示剩余post
+
+- 获取一个post详细信息
+    * url
+        http://66.228.36.17:8000/post/0/post_detail/
+        规则为 http://66.228.36.17:8000/post/post的Id/post_detail/
+
+    * output
+        {
+            "title": XXX概述,
+            "content": XXX描述,
+            "pub_date": "2012-08-28 23:06:22",
+            "reply_count": "3"
+        }
+
+    * desc
+        title: post的标题
+        content: post的详细内容
+        pub_date: post的发布日期
+        reply_count: post的回复数
+
+- 获取一个post的回复
+    * url
+        http://66.228.36.17:8000/post/0/post_reply/1/page/
+        规则为 http://66.228.36.17:8000/post/post的id/post_reply/页数/page/
+        每页最多返回10个回复
+
+    * output
+        {
+            "num_pages": 1, 
+            "replies": [
+                {
+                    "head": "http://127.0.0.1:8000/pic/head/missing.png", 
+                    "content": "<p>ffeef</p>", 
+                    "reply_id": 6,
+                    "user": "unknown_user", 
+                    "parents": [{
+                        "content": "<p>heheh</p>", 
+                        "parent_id": 1, 
+                        "head": "http://127.0.0.1:8000/pic/head/missing.png", 
+                        "pub_date": "2012-09-18 21:23", 
+                        "user": "unknown_user"}], 
+                    "pub_date": "2012-09-18 21:49"
+                }, 
+                {
+                    "head": "http://127.0.0.1:8000/pic/head/missing.png", 
+                    "content": "<p>gcvbbe</p>", 
+                    "reply_id": 5, 
+                    "user": "unknown_user", 
+                    "parents": [], 
+                    "pub_date": "2012-09-18 21:44"
+                }
+            ]
+        }
+
+    * desc
+        head: 头像url地址
+        reply_id: 回复的id
+        user: 目前只支持匿名用户
+        parents: 引用的所有楼的回复（递归， 数组中第一个表示parent，第二个表示parent的parent）
+        parent_id: 引用的回复的id
+        content: 回复的内容
+        created: 回复的日期
+        num_pages: 页面总数
+
+- 发布一个回复, 通过post提交方式
+    * url
+        http://66.228.36.17:8000/post/submit_reply/
+
+    * input
+        post_id: 回复的post的Id
+        content: 提交的回复内容
+        parent: 引用回复的Id, 没有则可以不传
+
+    * output
+        {"result":200}
+
+    * desc
+      成功之后需由客户端自己刷新页面
+
+      提交成功后result返回200, 否则返回404

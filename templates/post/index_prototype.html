@@ -1,0 +1,56 @@
+﻿{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}, {{ user.profile.level.level_name }}. Exp:{{ user.profile.cur_exp }} (Submit new story gain 5 exp, submit comment gain 1 exp). <a href="/auth/logout/">Logout</a></p>
+{% else %}
+    <p>Welcome, Please <a href="/auth/login/">Login</a>.</p>
+    <p><a href="/auth/register/">Register</a></p>
+{% endif %}
+
+{% if latest_post_list %}
+    <ul>
+    {% for post in latest_post_list %}
+        <li><a href="/post/{{ post.id }}/detail/">{{ post.title }}</a></li>
+	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            <div class="entry">{{ post.pic_or_flash|safe }}</div>
+            <div class="entry">{{ post.preview|safe }}</div>
+            <div class="clearfix"></div>
+            <p>Vote number: {{ post.vote_set.all|length }}</p>
+            <p>Neg Vote number: {{ post.negvote_set.all|length }}</p>
+            <p>Submit time: {{ post.pub_date }}</p>
+            <p>Comments: {{ post.reply_set.all|length }}</p>
+        <form action="/post/{{ post.id }}/vote/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Vote" />
+        </form>
+        <form action="/post/{{ post.id }}/neg_vote/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Neg Vote" />
+        </form>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No post are available.</p>
+{% endif %}
+
+<!--Pages-->
+<div class='wp-pagenavi'>
+<span class='pages'>页数 {{ page.number }} / {{ paginator.num_pages }} </span>
+<a href="/post{% ifnotequal type 0 %}/{{ type }}/type{% endifnotequal %}/1/page/">第一页</a>
+{% if page.has_previous %}
+    <a href="/post{% ifnotequal type 0 %}/{{ type }}/type{% endifnotequal %}/{{ page.previous_page_number }}/page/">上一页</a>
+    {% ifnotequal page.previous_page_number 1 %}
+       <span class='pages'> ... </span>
+    {% endifnotequal %}
+    <a href="/post{% ifnotequal type 0 %}/{{ type }}/type{% endifnotequal %}/{{ page.previous_page_number }}/page/">{{ page.previous_page_number }}</a>
+{% endif %}
+<span class='pages'> {{ page.number }} </span>
+{% if page.has_next %}
+    <a href="/post{% ifnotequal type 0 %}/{{ type }}/type{% endifnotequal %}/{{ page.next_page_number }}/page/">{{ page.next_page_number }}</a>
+    {% ifnotequal page.next_page_number paginator.num_pages %}
+        <span class='pages'> ... </span>
+    {% endifnotequal %}
+    <a href="/post{% ifnotequal type 0 %}/{{ type }}/type{% endifnotequal %}/{{ page.next_page_number }}/page/">下一页</a>
+{% endif %}
+<a href="/post{% ifnotequal type 0 %}/{{ type }}/type{% endifnotequal %}/{{ paginator.num_pages }}/page/">最后一页</a>
+</div>
+
+<p><a href="/post/submitpost/">SubmitPost</a></p>

@@ -1,0 +1,36 @@
+from django.conf.urls.defaults import *
+
+urlpatterns = patterns('publisher.apps.post.views',
+    # image access urls
+    (r'^gallery/$', 'browsegallery'),
+    (r'^gallery_list/$', 'gallery_list'),
+    (r'^gallery_list/(?P<page_num>\d+)/page/$', 'gallery_list'),
+    (r'^photo_list/(?P<gallery_id>\d+)/gallery/$', 'photo_list'),
+
+    # post operation urls
+    (r'^$', 'index'),
+    (r'^get_publish_info/$', 'get_publish_info'),
+    (r'^post_type_list/$', 'post_type_list'),
+    (r'^product_type_list/$', 'product_type_list'),
+    (r'^post_list/$', 'post_list'),
+    (r'^product_list/$', 'product_list'),
+    (r'^post_list/(?P<post_type>\d+)/post_type/(?P<page_num>\d+)/page/$', 'post_list'),
+    (r'^product_list/(?P<product_type>\d+)/product_type/(?P<page_num>\d+)/page/$', 'product_list'),
+    (r'^rolling_post/(?P<post_type>\d+)/post_type/$', 'rolling_post'),
+    (r'^(?P<post_type>\d+)/post_type/(?P<page_num>\d+)/page/$', 'index'),
+    (r'^(?P<post_type>\d+)/post_type/$', 'index'),
+    (r'^(?P<page_num>\d+)/page/$', 'index'),
+    (r'^submitpost/$', 'submitpost'),
+    (r'^submit_reply/$', 'submit_reply'),
+    (r'^submitresult/$', 'submitresult'),
+    (r'^(?P<post_id>\d+)/vote/$', 'vote'),
+    (r'^(?P<post_id>\d+)/neg_vote/$', 'neg_vote'),
+    (r'^(?P<post_id>\d+)/results/$', 'results'),
+    (r'^(?P<post_id>\d+)/detail/$', 'detail'),
+    (r'^(?P<post_id>\d+)/post_detail/$', 'post_detail'),
+    (r'^(?P<post_id>\d+)/post_reply/(?P<page_id>\d+)/page/$', 'post_reply'),
+    (r'^(?P<post_id>\d+)/show_reply/(?P<page_id>\d+)/page/$', 'show_reply'),
+    (r'^(?P<post_id>\d+)/detail/(?P<page_id>\d+)/page/$', 'detail'),
+    (r'^(?P<post_id>\d+)/reply/$', 'reply'),
+    (r'^(?P<post_id>\d+)/replyresult/$', 'replyresult'),
+)
