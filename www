@@ -4,6 +4,7 @@ server {
         location / {
                 include uwsgi_params;
                 uwsgi_pass 127.0.0.1:8630;
+                uwsgi_param UWSGI_CHDIR /webservers/sexbox;
         }
 }
 
@@ -13,5 +14,6 @@ server {
         location / {
                 include uwsgi_params;
                 uwsgi_pass 127.0.0.1:8640;
+                uwsgi_param UWSGI_CHDIR /webservers/publisher;
         }
 }
