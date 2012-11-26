@@ -1,12 +1,6 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('publisher.apps.post.views',
-    # image access urls
-    (r'^gallery/$', 'browsegallery'),
-    (r'^gallery_list/$', 'gallery_list'),
-    (r'^gallery_list/(?P<page_num>\d+)/page/$', 'gallery_list'),
-    (r'^photo_list/(?P<gallery_id>\d+)/gallery/$', 'photo_list'),
-
     # post operation urls
     (r'^$', 'index'),
     (r'^get_publish_info/$', 'get_publish_info'),

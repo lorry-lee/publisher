@@ -15,7 +15,6 @@ from django.views.static import serve
 from django.forms.models import model_to_dict
 from publisher.apps import json_response
 from publisher.apps.post import scan_picture_url, html_to_text
-from photologue.models import Gallery, Photo
 
 # Create your views here.
 
@@ -90,39 +89,6 @@ def product_list(request, product_type, page_num=1):
 def rolling_post(request, post_type):
     post_list = Post.objects.filter(is_public=True, post_type=post_type, need_roll=True).order_by('-pub_date')[0:3]
     return json_response(posts_to_dict(post_list, False))
-
-def gallery_list(request, page_num=1):
-    all_objects = Gallery.objects.order_by('-date_added')
-    paginator = Paginator(all_objects, 10)
-    page = paginator.page(page_num)
-    object_list = page.object_list
-    result = {}
-    objects = []
-    for obj in object_list:
-        object_dict = {}
-        object_dict['id'] = obj.pk
-        object_dict['title'] = obj.title
-        object_dict['photo_count'] = obj.photo_count()
-        object_dict['sample_url'] = obj.latest(1)[0].image.url
-        objects.append(object_dict)
-    result['galleries'] = objects
-    result['num_pages'] = paginator.num_pages
-    return json_response(result)
-
-def photo_list(request, gallery_id):
-    gallery = Gallery.objects.get(pk=gallery_id)
-    object_list = gallery.photos.filter(is_public=True).order_by('-date_added')
-    result = {}
-    objects = []
-    for obj in object_list:
-        object_dict = {}
-        object_dict['id'] = obj.pk
-        object_dict['url'] = obj.image.url
-        object_dict['name'] = obj.title
-        object_dict['link'] = settings.INSTANCE_URL
-        objects.append(object_dict)
-    result['photos'] = objects
-    return json_response(result)
 
 def post_detail(request, post_id):
     post = Post.objects.get(pk=post_id, is_public=True)
@@ -241,33 +207,6 @@ def submit_reply(request):
 @login_required
 def submitpost(request):
     return render_to_response('post/submitpost.html', {}, context_instance=RequestContext(request))
-
-@login_required
-def browsegallery(request, page_id=1):
-    try:
-        all_image = PostImage.objects.all().order_by('-upload_date')
-        paginator = Paginator(all_image, 50)
-        page = paginator.page(page_id)
-        post_image_list = page.object_list
-    except:
-        raise Http404
-    return render_to_response('post/gallery.html', locals(), context_instance=RequestContext(request))
-
-@login_required
-def uploadtogallery(request):
-    if request.method == 'POST':
-        try:
-            f = request.FILES['image']
-        except:
-            raise Http404
-        current_date = datetime.now()
-        storepath = 'photologue/photos/' + request.user.username + '/' + current_date.strftime("%Y.%m.%d") + '/' + f.name
-        # Save the image on the disk
-        default_storage.save(storepath, f)
-        # Create the thumbnails by thumbnail sizes
-        post_image = PostImage(image=storepath, user=request.user, upload_date=current_date)
-        post_image.save()
-    return HttpResponseRedirect(reverse('publisher.apps.post.views.browsegallery', args=()))
 
 def submitresult(request):
     submit_user = None

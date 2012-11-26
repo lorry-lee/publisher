@@ -3,7 +3,6 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from publisher.apps.fckeditor.fields import RichTextField
-from photologue.models import ImageModel
 from django.http import Http404
 from django.shortcuts import get_list_or_404
 
@@ -75,10 +74,6 @@ class NegVote(Model):
     post = ForeignKey(Post)
     ip = CharField(max_length=64)
     negvote_date = DateTimeField(_("negvoted"),default=datetime.now)
-
-class PostImage(ImageModel):
-    user = ForeignKey(User)
-    upload_date = DateTimeField(_("upload_date"),default=datetime.now)
 
 class Reply(Model):
     "Post's Reply"

@@ -122,5 +122,4 @@ INSTALLED_APPS = (
     'publisher.apps.auth',
     'publisher.apps.fckeditor',
     'publisher.apps.post',
-    'photologue',
 )
