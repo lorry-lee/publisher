@@ -1,9 +1,9 @@
 server {
-        listen 8000;
+        listen 9000;
         server_name localhost;
         location / {
                 include uwsgi_params;
                 uwsgi_pass 127.0.0.1:8630;
-                uwsgi_param UWSGI_CHDIR /webservers/sexbox;
+                uwsgi_param UWSGI_CHDIR /webservers/publisher;
         }
 }
